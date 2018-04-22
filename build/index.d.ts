@@ -34,13 +34,19 @@ export declare class Handler {
     /**
      * Create the tooltip handler and initialize the element and style.
      *
-     * @param opt Tooltip Options
+     * @param options Tooltip Options
      */
     constructor(options?: Partial<Options>);
     /**
      * The handler function.
      */
     private handler(handler, event, item, value);
+    /**
+     * Format the value to be shown in the toolip.
+     *
+     * @param value The value to show in the tooltip.
+     */
+    private formatValue(value);
 }
 /**
  * Create a tooltip handler and register it with the provided view.

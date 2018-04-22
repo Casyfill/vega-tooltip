@@ -279,43 +279,13 @@
       return value.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   }
   /**
-   * Format the value to be shown in the toolip.
-   *
-   * @param value The value to show in the tooltip.
-   * @param sanitize A sanitization function that removes dangerous HTML.
-   */
-  function formatValue(value, sanitize) {
-      if (isArray(value)) {
-          return "[" + value.map(function (v) { return sanitize(isString(v) ? v : stringify$1(v)); }).join(', ') + "]";
-      }
-      if (isObject(value)) {
-          var content = '';
-          var _a = value, title = _a.title, rest = __rest(_a, ["title"]);
-          if (title) {
-              content += "<h2>" + title + "</h2>";
-          }
-          content += '<table>';
-          for (var _i = 0, _b = Object.keys(rest); _i < _b.length; _i++) {
-              var key$$1 = _b[_i];
-              var val = rest[key$$1];
-              if (isObject(val)) {
-                  val = stringify$1(val);
-              }
-              content += "<tr><td class=\"key\">" + sanitize(key$$1) + ":</td><td class=\"value\">" + sanitize(val) + "</td></tr>";
-          }
-          content += "</table>";
-          return content;
-      }
-      return sanitize(String(value));
-  }
-  /**
    * The tooltip handler class.
    */
   var Handler = /** @class */ (function () {
       /**
        * Create the tooltip handler and initialize the element and style.
        *
-       * @param opt Tooltip Options
+       * @param options Tooltip Options
        */
       function Handler(options) {
           this.options = __assign({}, DEFAULT_OPTIONS, options);
@@ -349,7 +319,7 @@
               return;
           }
           // set the tooltip content
-          this.el.innerHTML = formatValue(value, this.options.sanitize);
+          this.el.innerHTML = this.formatValue(value);
           // make the tooltip visible
           this.el.classList.add('visible', this.options.theme + "-theme");
           // position the tooltip
@@ -365,6 +335,36 @@
           }
           this.el.setAttribute('style', "top: " + y + "px; left: " + x + "px");
       };
+      /**
+       * Format the value to be shown in the toolip.
+       *
+       * @param value The value to show in the tooltip.
+       */
+      Handler.prototype.formatValue = function (value) {
+          var sanitize = this.options.sanitize;
+          if (isArray(value)) {
+              return "[" + value.map(function (v) { return sanitize(isString(v) ? v : stringify$1(v)); }).join(', ') + "]";
+          }
+          if (isObject(value)) {
+              var content = '';
+              var _a = value, title = _a.title, rest = __rest(_a, ["title"]);
+              if (title) {
+                  content += "<h2>" + title + "</h2>";
+              }
+              content += '<table>';
+              for (var _i = 0, _b = Object.keys(rest); _i < _b.length; _i++) {
+                  var key$$1 = _b[_i];
+                  var val = rest[key$$1];
+                  if (isObject(val)) {
+                      val = stringify$1(val);
+                  }
+                  content += "<tr><td class=\"key\">" + sanitize(key$$1) + ":</td><td class=\"value\">" + sanitize(val) + "</td></tr>";
+              }
+              content += "</table>";
+              return content;
+          }
+          return sanitize(String(value));
+      };
       return Handler;
   }());
   /**
@@ -375,7 +375,7 @@
    */
   function index (view, opt) {
       var handler = new Handler(opt);
-      view.tooltip(handler.call);
+      view.tooltip(handler.call).run();
       return handler;
   }
 
