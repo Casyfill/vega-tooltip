@@ -12,9 +12,9 @@ export declare type Options = typeof DEFAULT_OPTIONS;
 /**
  * Escape special HTML characters.
  *
- * @param value A string value to escape.
+ * @param value A value to convert to string and HTML-escape.
  */
-export declare function escapeHTML(value: string): string;
+export declare function escapeHTML(value: any): string;
 /**
  * The tooltip handler class.
  */

@@ -273,10 +273,10 @@
   /**
    * Escape special HTML characters.
    *
-   * @param value A string value to escape.
+   * @param value A value to convert to string and HTML-escape.
    */
   function escapeHTML(value) {
-      return value.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+      return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;');
   }
   /**
    * The tooltip handler class.
@@ -375,7 +375,7 @@
    */
   function index (view, opt) {
       var handler = new Handler(opt);
-      view.tooltip(handler.call).run();
+      view.tooltip(handler.call).hover().run();
       return handler;
   }
 
